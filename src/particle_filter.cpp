@@ -97,6 +97,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	//   http://planning.cs.uiuc.edu/node99.html
 
 	//Update each particle separately
+	double particle_weight_sum = 0;
 	for (int i = 0; i < num_particles; ++i) {
         //transform each noisy observation to for the specific particle
         //save observation in LandmarkObs vector structure
@@ -128,16 +129,49 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
                 }
             }
         }
-
+        //now that the closest landmark to each mapped_observation is known, multiply
+        //probabilities together to obtain the weight for the particle
+        double particle_prob = 1.0;
+        double x2_dist;
+        double y2_dist;
+        for (int j = 0; j < mapped_observations.size(); ++j){
+            x2_dist = pow(map_landmarks.landmark_list[mapped_observations[j].id].x_f-mapped_observations[j].x,2);
+            y2_dist = pow(map_landmarks.landmark_list[mapped_observations[j].id].y_f-mapped_observations[j].y,2);
+            particle_prob *= exp(-1.0*(x2_dist+y2_dist)/(2*std_landmark[0]*std_landmark[0]));
+        }
+        //set this value as the new weight for this particle
+        particles[i].weight = particle_prob;
+        //add the weight to the sum of the weights
+        particle_weight_sum = particle_prob;
 	}
-
-
+    //Normalize all weight values based on the sum
+    for (int i = 0; i < num_particles; ++i) {
+        particles[i].weight /= particle_weight_sum;
+    }
 }
 
 void ParticleFilter::resample() {
 	// TODO: Resample particles with replacement with probability proportional to their weight.
 	// NOTE: You may find std::discrete_distribution helpful here.
 	//   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
+
+	//obtain the random number generator and a vector of all of the weights
+    std::default_random_engine generator;
+    std::vector<double> weight_vector;
+    for (int i = 0; i < num_particles; ++i){
+        weight_vector.push_back(particles[i].weight);
+    }
+    //obtain the discrete distribution according to the weight_vector
+    std::discrete_distribution<int> distribution weight_vector;
+    //Sample with replacement from this distribution, appending the new particles
+    //to a list
+    std::vector<Particle> particles_updated(num_particles);
+    for (int i = 0; i < num_particles; ++i){
+        particles_updated.push_back(particles[distribution(generator)]);
+    }
+    //replace the old list with the new list and delete the old list
+    particles.swap(particles_updated);
+
 
 }
 

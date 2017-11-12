@@ -23,7 +23,7 @@ const double M_PI = 3.14159265358979323846;
  * Struct representing one position/control measurement.
  */
 struct control_s {
-	
+
 	double velocity;	// Velocity [m/s]
 	double yawrate;		// Yaw rate [rad/s]
 };
@@ -32,7 +32,7 @@ struct control_s {
  * Struct representing one ground truth position.
  */
 struct ground_truth {
-	
+
 	double x;		// Global vehicle x position [m]
 	double y;		// Global vehicle y position
 	double theta;	// Global vehicle yaw [rad]
@@ -42,7 +42,7 @@ struct ground_truth {
  * Struct representing one landmark observation measurement.
  */
 struct LandmarkObs {
-	
+
 	int id;				// Id of matching landmark in the map.
 	double x;			// Local (vehicle coordinates) x position of landmark observation [m]
 	double y;			// Local (vehicle coordinates) y position of landmark observation [m]
@@ -74,7 +74,7 @@ inline double * getError(double gt_x, double gt_y, double gt_theta, double pf_x,
  * @param filename Name of file containing map data.
  * @output True if opening and reading file was successful
  */
-inline bool read_map_data(std::string filename, Map& map) {
+inline bool read_map_data(std::string filename, Map& map_data) {
 
 	// Get file of map:
 	std::ifstream in_file_map(filename.c_str(),std::ifstream::in);
@@ -82,7 +82,7 @@ inline bool read_map_data(std::string filename, Map& map) {
 	if (!in_file_map) {
 		return false;
 	}
-	
+
 	// Declare single line of map file:
 	std::string line_map;
 
@@ -109,7 +109,7 @@ inline bool read_map_data(std::string filename, Map& map) {
 		single_landmark_temp.y_f  = landmark_y_f;
 
 		// Add to landmark list of map:
-		map.landmark_list.push_back(single_landmark_temp);
+		map_data.landmark_list.push_back(single_landmark_temp);
 	}
 	return true;
 }
@@ -146,7 +146,7 @@ inline bool read_control_data(std::string filename, std::vector<control_s>& posi
 		iss_pos >> velocity;
 		iss_pos >> yawrate;
 
-		
+
 		// Set values
 		meas.velocity = velocity;
 		meas.yawrate = yawrate;
@@ -182,7 +182,7 @@ inline bool read_gt_data(std::string filename, std::vector<ground_truth>& gt) {
 		double x, y, azimuth;
 
 		// Declare single ground truth:
-		ground_truth single_gt; 
+		ground_truth single_gt;
 
 		//read data from line to values:
 		iss_pos >> x;
