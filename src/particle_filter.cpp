@@ -53,9 +53,9 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 
 	// This line creates a normal (Gaussian) distribution for x, y, and theta
 	default_random_engine gen;
-	normal_distribution<double> dist_x(0, std_pos[0]/2);
-	normal_distribution<double> dist_y(0, std_pos[1]/2);
-	normal_distribution<double> dist_theta(0, std_pos[2]/2);
+	normal_distribution<double> dist_x(0, std_pos[0]);
+	normal_distribution<double> dist_y(0, std_pos[1]);
+	normal_distribution<double> dist_theta(0, std_pos[2]);
 
 	if (abs(yaw_rate)<=0.00001){
         for (int i = 0; i < num_particles; ++i) {
