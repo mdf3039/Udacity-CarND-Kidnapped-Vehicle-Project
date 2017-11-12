@@ -87,7 +87,7 @@ int main()
 
 			pf.prediction(delta_t, sigma_pos, previous_velocity, previous_yawrate);
 			cout<<"Prediction Success."<<endl;
-		  }
+
 
 		  // receive noisy observation data from the simulator
 		  // sense_observations in JSON format [{obs_x,obs_y},{obs_x,obs_y},...{obs_x,obs_y}]
@@ -122,6 +122,8 @@ int main()
 		  cout<<"Update Success."<<endl;
 		  pf.resample();
 		  cout<<"Resample Success."<<endl;
+
+		  }
 
 		  // Calculate and output the average weighted error of the particle filter over all time steps so far.
 		  vector<Particle> particles = pf.particles;
