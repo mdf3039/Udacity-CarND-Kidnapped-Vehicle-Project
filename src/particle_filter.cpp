@@ -162,7 +162,7 @@ void ParticleFilter::resample() {
         weight_vector.push_back(particles[i].weight);
     }
     //obtain the discrete distribution according to the weight_vector
-    std::discrete_distribution<int> distribution weight_vector;
+    std::discrete_distribution<> distribution(weight_vector.begin(), weight_vector.end());
     //Sample with replacement from this distribution, appending the new particles
     //to a list
     std::vector<Particle> particles_updated(num_particles);
