@@ -119,7 +119,7 @@ int main()
 				obs.y = y_sense[i];
 				noisy_observations.push_back(obs);
         	}
-        	cout<<"Noisy Observations: "<<noisy_observations<<endl;
+        	cout<<"Noisy Observations: "<<endl;
 
 		  // Update the weights and resample
 		  pf.updateWeights(sensor_range, sigma_landmark, noisy_observations, map_data);
