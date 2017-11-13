@@ -67,7 +67,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	normal_distribution<double> dist_y(0, std_pos[1]);
 	normal_distribution<double> dist_theta(0, std_pos[2]);
 
-	if (abs(yaw_rate)<=0.00001){
+	if (abs(yaw_rate)>0.001){
         for (int i = 0; i < num_particles; ++i) {
             particles[i].x += velocity/yaw_rate*(sin(particles[i].theta+yaw_rate*delta_t)-sin(particles[i].theta))+dist_x(gen);
             particles[i].y += velocity/yaw_rate*(-1*cos(particles[i].theta+yaw_rate*delta_t)+cos(particles[i].theta))+dist_y(gen);
@@ -76,9 +76,15 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	}
     else{
         for (int i = 0; i < num_particles; ++i) {
+            cout<<"X: "<<particles[i].x<<endl;
             particles[i].x += velocity*cos(particles[i].theta)*delta_t+dist_x(gen);
+            cout<<"X_new: "<<particles[i].x<<endl;
+            cout<<"Y: "<<particles[i].y<<endl;
             particles[i].y += velocity*sin(particles[i].theta)*delta_t+dist_y(gen);
+            cout<<"Y_new: "<<particles[i].y<<endl;
+            cout<<"Theta: "<<particles[i].theta<<endl;
             particles[i].theta += yaw_rate*delta_t+dist_theta(gen);
+            cout<<"Theta_new: "<<particles[i].theta<<endl;
         }
 	}
 
