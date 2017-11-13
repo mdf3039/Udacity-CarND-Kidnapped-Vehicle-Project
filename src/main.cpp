@@ -87,7 +87,6 @@ int main()
 
 			pf.prediction(delta_t, sigma_pos, previous_velocity, previous_yawrate);
 			cout<<"Prediction Success."<<endl;
-		  }
 
 
 		  // receive noisy observation data from the simulator
@@ -95,8 +94,6 @@ int main()
 		  	std::vector<LandmarkObs> noisy_observations;
 		  	std::string sense_observations_x = j[1]["sense_observations_x"];
 		  	std::string sense_observations_y = j[1]["sense_observations_y"];
-		  	cout<<"Sense Observation X: "<<sense_observations_x<<endl;
-		  	cout<<"Sense Observation Y: "<<sense_observations_y<<endl;
 
 		  	std::vector<float> x_sense;
   			std::istringstream iss_x(sense_observations_x);
@@ -126,6 +123,7 @@ int main()
 		  cout<<"Update Success."<<endl;
 		  pf.resample();
 		  cout<<"Resample Success."<<endl;
+		  }
 
 
 
@@ -136,7 +134,6 @@ int main()
 		  Particle best_particle;
 		  double weight_sum = 0.0;
 		  for (int i = 0; i < num_particles; ++i) {
-            cout <<particles[i].weight<<endl;
 			if (particles[i].weight > highest_weight) {
 				highest_weight = particles[i].weight;
 				best_particle = particles[i];
