@@ -185,15 +185,18 @@ void ParticleFilter::resample() {
     //Sample with replacement from this distribution, appending the new particles
     //to a list
     cout<<"Numbers generated: ";
-    std::vector<Particle> particles_updated(num_particles);
+    std::vector<Particle> particles_updated;
     int number_generated;
     Particle generated_particle;
     for (int i = 0; i < num_particles; ++i){
         number_generated = distribution(generator);
         cout<<number_generated<<" ";
         generated_particle.theta = particles[number_generated].theta;
+        cout<<generated_particle.theta<<" ";
         generated_particle.x = particles[number_generated].x;
+        cout<<generated_particle.x<<" ";
         generated_particle.y = particles[number_generated].y;
+        cout<<generated_particle.y<<" ";
         generated_particle.weight = particles[number_generated].weight;
         particles_updated.push_back(generated_particle);
     }
