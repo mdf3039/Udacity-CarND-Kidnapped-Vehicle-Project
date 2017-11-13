@@ -39,9 +39,11 @@ void ParticleFilter::init(double x, double y, double theta, double std_pos[]) {
         weights.push_back(1.0);
         Particle gen_particle;
         gen_particle.x = dist_x(gen);
-
+        cout<<"X: "<<gen_particle.x<<endl;
         gen_particle.y = dist_y(gen);
+        cout<<"Y: "<<gen_particle.y<<endl;
         gen_particle.theta = dist_theta(gen);
+        cout<<"Theta: "<<gen_particle.theta<<endl;
         gen_particle.weight = 1.0;
         particles.push_back(gen_particle);
 	}
