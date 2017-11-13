@@ -100,27 +100,33 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	//Update each particle separately
 	double particle_weight_sum = 0;
 	for (int i = 0; i < num_particles; ++i) {
+        cout<<"Weights update"<<endl;
         //transform each noisy observation to for the specific particle
         //save observation in LandmarkObs vector structure
         std::vector<LandmarkObs> mapped_observations;
+        cout<<"Landmark vector created"<<endl;
         for (int j = 0; j < observations.size(); ++j){
             LandmarkObs mapped_obs;
             mapped_obs.x = particles[i].x + (cos(particles[i].theta)*observations[j].x)-(sin(particles[i].theta)-observations[j].y);
             mapped_obs.y = particles[i].y + (sin(particles[i].theta)*observations[j].x)+(cos(particles[i].theta)-observations[j].y);
             mapped_observations.push_back(mapped_obs);
         }
+        cout<<"Landmark vector complete"<<endl;
         //obtain the distance from the first map landmark to all of the transformed
         //observations. save the distances in a vector and change the id in the
         //mapped observations to the first map landmark id
         std::vector<double> landmark_distances;
+        cout<<"Landmark distances created"<<endl;
         for (int j = 0; j < mapped_observations.size(); ++j){
             landmark_distances.push_back(sqrt(pow(map_landmarks.landmark_list[0].x_f-mapped_observations[j].x,2)+pow(map_landmarks.landmark_list[0].y_f-mapped_observations[j].y,2)));
             mapped_observations[j].id = 0;
         }
+        cout<<"Landmark distances complete: "<<landmark_distances<<endl;
         //for the other landmarks, obtain the distance from the landmark to each observation
         //if distance is less than the previous distance, change the id to the landmark
         //also change the distance in the landmark_distances vector to match
         double distance_to_landmark;
+        cout<<"Distance to landmark created"<<endl;
         for (int k = 1; k < map_landmarks.landmark_list.size(); ++k){
             for (int j = 0; j < mapped_observations.size(); ++j){
                 distance_to_landmark = sqrt(pow(map_landmarks.landmark_list[k].x_f-mapped_observations[j].x,2)+pow(map_landmarks.landmark_list[k].y_f-mapped_observations[j].y,2));
@@ -130,25 +136,30 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
                 }
             }
         }
+        cout<<"Distance to landmark complete"<<endl;
         //now that the closest landmark to each mapped_observation is known, multiply
         //probabilities together to obtain the weight for the particle
         double particle_prob = 1.0;
         double x2_dist;
         double y2_dist;
+        cout<<"Particle prob created"<<endl;
         for (int j = 0; j < mapped_observations.size(); ++j){
             x2_dist = pow(map_landmarks.landmark_list[mapped_observations[j].id].x_f-mapped_observations[j].x,2);
             y2_dist = pow(map_landmarks.landmark_list[mapped_observations[j].id].y_f-mapped_observations[j].y,2);
             particle_prob *= exp(-1.0*(x2_dist+y2_dist)/(2*std_landmark[0]*std_landmark[0]));
         }
+        cout<<"Particle prob complete at: "<<particle_prob<<endl;
         //set this value as the new weight for this particle
         particles[i].weight = particle_prob;
         //add the weight to the sum of the weights
-        particle_weight_sum = particle_prob;
+        particle_weight_sum += particle_prob;
 	}
+	cout<<"Normalization created: "<<particle_weight_sum<<endl;
     //Normalize all weight values based on the sum
     for (int i = 0; i < num_particles; ++i) {
         particles[i].weight /= particle_weight_sum;
     }
+    cout<<"Normalization complete: "<<particle_weight_sum<<endl;
 }
 
 void ParticleFilter::resample() {
