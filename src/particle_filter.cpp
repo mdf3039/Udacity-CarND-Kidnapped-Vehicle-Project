@@ -121,7 +121,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
             landmark_distances.push_back(sqrt(pow(map_landmarks.landmark_list[0].x_f-mapped_observations[j].x,2)+pow(map_landmarks.landmark_list[0].y_f-mapped_observations[j].y,2)));
             mapped_observations[j].id = 0;
         }
-        cout<<"Landmark distances complete: "<<landmark_distances<<endl;
+        cout<<"Landmark distances complete: "<<endl;
         //for the other landmarks, obtain the distance from the landmark to each observation
         //if distance is less than the previous distance, change the id to the landmark
         //also change the distance in the landmark_distances vector to match
