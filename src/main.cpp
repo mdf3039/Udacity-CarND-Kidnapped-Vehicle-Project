@@ -95,6 +95,8 @@ int main()
 		  	std::vector<LandmarkObs> noisy_observations;
 		  	std::string sense_observations_x = j[1]["sense_observations_x"];
 		  	std::string sense_observations_y = j[1]["sense_observations_y"];
+		  	cout<<"Sense Observation X: "<<sense_observations_x<<endl;
+		  	cout<<"Sense Observation Y: "<<sense_observations_y<<endl;
 
 		  	std::vector<float> x_sense;
   			std::istringstream iss_x(sense_observations_x);
@@ -117,6 +119,7 @@ int main()
 				obs.y = y_sense[i];
 				noisy_observations.push_back(obs);
         	}
+        	cout<<"Noisy Observations: "<<noisy_observations<<endl;
 
 		  // Update the weights and resample
 		  pf.updateWeights(sensor_range, sigma_landmark, noisy_observations, map_data);
