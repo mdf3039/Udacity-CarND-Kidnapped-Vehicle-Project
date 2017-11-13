@@ -25,17 +25,6 @@ std::string hasData(std::string s) {
   return "";
 }
 
-struct Particle {
-	int id;
-	double x;
-	double y;
-	double theta;
-	double weight;
-	std::vector<int> associations;
-	std::vector<double> sense_x;
-	std::vector<double> sense_y;
-};
-
 int main()
 {
   uWS::Hub h;
@@ -137,12 +126,13 @@ int main()
 		  }
 
 		  // Calculate and output the average weighted error of the particle filter over all time steps so far.
-		  vector<Particle> particles = pf.particles;
+		  std::vector<Particle> particles = pf.particles;
 		  int num_particles = pf.num_particles;
 		  double highest_weight = -1.0;
 		  Particle best_particle;
 		  double weight_sum = 0.0;
 		  for (int i = 0; i < num_particles; ++i) {
+            cout <<particles[i].weight<<endl;
 			if (particles[i].weight > highest_weight) {
 				highest_weight = particles[i].weight;
 				best_particle = particles[i];

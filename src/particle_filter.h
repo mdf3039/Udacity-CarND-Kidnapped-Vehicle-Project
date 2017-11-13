@@ -27,9 +27,6 @@ struct Particle {
 
 class ParticleFilter {
 
-	// Number of particles to draw
-	int num_particles;
-
 
 
 	// Flag, if filter is initialized
@@ -39,6 +36,8 @@ class ParticleFilter {
 	std::vector<double> weights;
 
 public:
+    // Number of particles to draw
+	int num_particles;
 
 	// Set of current particles
 	std::vector<Particle> particles;
