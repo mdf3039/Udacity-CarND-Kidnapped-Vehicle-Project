@@ -79,6 +79,7 @@ int main()
 
 			pf.init(sense_x, sense_y, sense_theta, sigma_pos);
 			cout<<"Initialization Success."<<endl;
+			pf.is_initialized = true;
 		  }
 		  else {
 			// Predict the vehicle's next state from previous (noiseless control) data.
