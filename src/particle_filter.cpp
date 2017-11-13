@@ -24,7 +24,7 @@ void ParticleFilter::init(double x, double y, double theta, double std_pos[]) {
 	//   x, y, theta and their uncertainties from GPS) and all weights to 1.
 	// Add random Gaussian noise to each particle.
 	// NOTE: Consult particle_filter.h for more information about this method (and others in this file).
-	num_particles = 1000;
+	num_particles = 10;
 
 	// This line creates a normal (Gaussian) distribution for x, y, and theta
 	default_random_engine gen;
@@ -145,10 +145,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
                 }
             }
         }
-        //print out the distances
-        for (int k = 0; k < landmark_distances.size(); ++k){
-            cout<<"("<<k<<","<<landmark_distances[k]<<") ";
-        }
         //now that the closest landmark to each mapped_observation is known, multiply
         //probabilities together to obtain the weight for the particle
         double particle_prob = 1.0;
@@ -159,8 +155,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
             y2_dist = pow(map_landmarks.landmark_list[mapped_observations[j].id].y_f-mapped_observations[j].y,2);
             particle_prob *= exp(-1.0*(x2_dist+y2_dist)/(2*std_landmark[0]*std_landmark[0]));
         }
-        //print out the particle probability
-        cout<<particle_prob<<endl;
         //set this value as the new weight for this particle
         particles[i].weight = particle_prob;
         //add the weight to the sum of the weights
@@ -169,7 +163,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
     //Normalize all weight values based on the sum
     for (int i = 0; i < num_particles; ++i) {
         particles[i].weight /= particle_weight_sum;
-        cout<<particles[i].weight<<endl;
     }
 }
 
@@ -181,20 +174,45 @@ void ParticleFilter::resample() {
 	//obtain the random number generator and a vector of all of the weights
     std::default_random_engine generator;
     std::vector<double> weight_vector;
+    cout<<"Particle weights in vector: ";
     for (int i = 0; i < num_particles; ++i){
         weight_vector.push_back(particles[i].weight);
+        cout<<particles[i].weight<<" ";
     }
+    cout<<endl;
     //obtain the discrete distribution according to the weight_vector
     std::discrete_distribution<> distribution(weight_vector.begin(), weight_vector.end());
     //Sample with replacement from this distribution, appending the new particles
     //to a list
+    cout<<"Numbers generated: ";
     std::vector<Particle> particles_updated(num_particles);
+    int number_generated;
     for (int i = 0; i < num_particles; ++i){
-        particles_updated.push_back(particles[distribution(generator)]);
+        number_generated = distribution(generator);
+        cout<<number_generated<<" ";
+        particles_updated.push_back(particles[number_generated]);
     }
+    cout<<endl;
     //replace the old list with the new list and delete the old list
+    cout<<"Old particle list: ";
+    for (int i = 0; i < num_particles; ++i){
+        cout<<"("<<particles[i].x<<","<<particles[i].y<<","
+            <<particles[i].weight<<","<<particles[i].theta<<") ";
+    }
+    cout<<endl;
+    cout<<"New particle list: ";
+    for (int i = 0; i < num_particles; ++i){
+        cout<<"("<<particles_updated[i].x<<","<<particles_updated[i].y<<","
+            <<particles_updated[i].weight<<","<<particles_updated[i].theta<<") ";
+    }
+    cout<<endl;
     particles.swap(particles_updated);
-
+    cout<<"New old particle list: ";
+    for (int i = 0; i < num_particles; ++i){
+        cout<<"("<<particles[i].x<<","<<particles[i].y<<","
+            <<particles[i].weight<<","<<particles[i].theta<<") ";
+    }
+    cout<<endl;
 
 }
 
