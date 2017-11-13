@@ -80,21 +80,21 @@ int main()
 			pf.init(sense_x, sense_y, sense_theta, sigma_pos);
 			cout<<"Initialization Success."<<endl;
 		  }
-		  //else {
+		  else {
 			// Predict the vehicle's next state from previous (noiseless control) data.
 		  	double previous_velocity = std::stod(j[1]["previous_velocity"].get<std::string>());
 			double previous_yawrate = std::stod(j[1]["previous_yawrate"].get<std::string>());
 
 			pf.prediction(delta_t, sigma_pos, previous_velocity, previous_yawrate);
 			cout<<"Prediction Success."<<endl;
-		  //}
+		  }
 
 
 		  // receive noisy observation data from the simulator
 		  // sense_observations in JSON format [{obs_x,obs_y},{obs_x,obs_y},...{obs_x,obs_y}]
-		  	vector<LandmarkObs> noisy_observations;
-		  	string sense_observations_x = j[1]["sense_observations_x"];
-		  	string sense_observations_y = j[1]["sense_observations_y"];
+		  	std::vector<LandmarkObs> noisy_observations;
+		  	std::string sense_observations_x = j[1]["sense_observations_x"];
+		  	std::string sense_observations_y = j[1]["sense_observations_y"];
 
 		  	std::vector<float> x_sense;
   			std::istringstream iss_x(sense_observations_x);
