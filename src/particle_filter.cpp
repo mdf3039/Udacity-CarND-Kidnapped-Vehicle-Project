@@ -28,9 +28,9 @@ void ParticleFilter::init(double x, double y, double theta, double std_pos[]) {
 
 	// This line creates a normal (Gaussian) distribution for x, y, and theta
 	default_random_engine gen;
-	normal_distribution<double> dist_x(x, 10);
-	normal_distribution<double> dist_y(y, 10);
-	normal_distribution<double> dist_theta(theta, .2);
+	normal_distribution<double> dist_x(x, 50.0);
+	normal_distribution<double> dist_y(y, 50.0);
+	normal_distribution<double> dist_theta(theta, 2.0);
 
 	//std::vector<double> weights(num_particles);
 	//std::vector<Particle> particles(num_particles);
@@ -39,11 +39,15 @@ void ParticleFilter::init(double x, double y, double theta, double std_pos[]) {
         weights.push_back(1.0);
         Particle gen_particle;
         gen_particle.x = dist_x(gen);
-        cout<<"X: "<<gen_particle.x<<endl;
         gen_particle.y = dist_y(gen);
-        cout<<"Y: "<<gen_particle.y<<endl;
         gen_particle.theta = dist_theta(gen);
-        cout<<"Theta: "<<gen_particle.theta<<endl;
+        //normalize theta to be between -pi and pi
+        while (gen_particle.theta>M_PI){
+            gen_particle.theta-=M_PI;
+        }
+        while (gen_particle.theta<-1.0*M_PI){
+            gen_particle.theta+=M_PI;
+        }
         gen_particle.weight = 1.0;
         particles.push_back(gen_particle);
 	}
