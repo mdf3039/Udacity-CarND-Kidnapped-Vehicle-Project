@@ -149,7 +149,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         for (int k = 0; k < landmark_distances.size(); ++k){
             cout<<"("<<k<<","<<landmark_distances[k]<<") ";
         }
-        cout<<endl;
         //now that the closest landmark to each mapped_observation is known, multiply
         //probabilities together to obtain the weight for the particle
         double particle_prob = 1.0;
@@ -160,6 +159,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
             y2_dist = pow(map_landmarks.landmark_list[mapped_observations[j].id].y_f-mapped_observations[j].y,2);
             particle_prob *= exp(-1.0*(x2_dist+y2_dist)/(2*std_landmark[0]*std_landmark[0]));
         }
+        //print out the particle probability
+        cout<<particle_prob<<endl;
         //set this value as the new weight for this particle
         particles[i].weight = particle_prob;
         //add the weight to the sum of the weights
