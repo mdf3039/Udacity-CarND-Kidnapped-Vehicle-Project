@@ -169,6 +169,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
     //Normalize all weight values based on the sum
     for (int i = 0; i < num_particles; ++i) {
         particles[i].weight /= particle_weight_sum;
+        cout<<particles[i].weight<<endl;
     }
 }
 
