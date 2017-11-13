@@ -28,9 +28,9 @@ void ParticleFilter::init(double x, double y, double theta, double std_pos[]) {
 
 	// This line creates a normal (Gaussian) distribution for x, y, and theta
 	default_random_engine gen;
-	normal_distribution<double> dist_x(x, std_pos[0]);
-	normal_distribution<double> dist_y(y, std_pos[1]);
-	normal_distribution<double> dist_theta(theta, std_pos[2]);
+	normal_distribution<double> dist_x(x, 10);
+	normal_distribution<double> dist_y(y, 10);
+	normal_distribution<double> dist_theta(theta, .2);
 
 	//std::vector<double> weights(num_particles);
 	//std::vector<Particle> particles(num_particles);
