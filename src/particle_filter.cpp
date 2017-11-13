@@ -104,12 +104,18 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         //transform each noisy observation to for the specific particle
         //save observation in LandmarkObs vector structure
         std::vector<LandmarkObs> mapped_observations;
-        cout<<"Landmark vector created"<< observations.size()<<endl;
+        cout<<"Landmark vector created: "<< observations.size()<<endl;
         for (int j = 0; j < observations.size(); ++j){
             LandmarkObs mapped_obs;
-            cout<<observations[j].x<<endl;
+            cout<<"Observation in x: "<<observations[j].x<<endl;
+            cout<<"Observation in y: "<<observations[j].y<<endl;
+            cout<<"Particle in x: "<<particles[i].x<<endl;
+            cout<<"Particle in y: "<<particles[i].y<<endl;
+            cout<<"Particle in theta: "<<particles[i].theta<<endl;
             mapped_obs.x = particles[i].x + (cos(particles[i].theta)*observations[j].x)-(sin(particles[i].theta)-observations[j].y);
+            cout<<"Mapped_obs X: "<<mapped_obs.x<<endl;
             mapped_obs.y = particles[i].y + (sin(particles[i].theta)*observations[j].x)+(cos(particles[i].theta)-observations[j].y);
+            cout<<"Mapped_obs Y: "<<mapped_obs.y<<endl;
             mapped_observations.push_back(mapped_obs);
         }
         cout<<"Landmark vector complete"<<endl;
