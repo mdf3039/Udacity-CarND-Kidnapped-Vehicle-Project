@@ -32,15 +32,18 @@ void ParticleFilter::init(double x, double y, double theta, double std_pos[]) {
 	normal_distribution<double> dist_y(y, std_pos[1]);
 	normal_distribution<double> dist_theta(theta, std_pos[2]);
 
-	std::vector<double> weights(num_particles);
-	std::vector<Particle> particles(num_particles);
+	//std::vector<double> weights(num_particles);
+	//std::vector<Particle> particles(num_particles);
 	// for each particle, create the Particle and weight
 	for (int i = 0; i < num_particles; ++i) {
-        weights[i] = 1.0;
-        particles[i].x = dist_x(gen);
-        particles[i].y = dist_y(gen);
-        particles[i].theta = dist_theta(gen);
-        particles[i].weight = weights[i];
+        weights.push_back(1.0);
+        Particle gen_particle;
+        gen_particle.x = dist_x(gen);
+
+        gen_particle.y = dist_y(gen);
+        gen_particle.theta = dist_theta(gen);
+        gen_particle.weight = 1.0;
+        particles.push_back(gen_particle);
 	}
 	is_initialized = true;
 
