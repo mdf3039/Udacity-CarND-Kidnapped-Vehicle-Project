@@ -90,6 +90,7 @@ int main()
 
 			pf.prediction(delta_t, sigma_pos, previous_velocity, previous_yawrate);
 			cout<<"Prediction Success."<<endl;
+		  }
 
 
 
@@ -127,7 +128,7 @@ int main()
 		  cout<<"Update Success."<<endl;
 		  pf.resample();
 		  cout<<"Resample Success."<<endl;
-		  }
+
 
 
 
