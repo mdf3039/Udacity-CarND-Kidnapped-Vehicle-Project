@@ -33,8 +33,8 @@ int main()
   double delta_t = 0.1; // Time elapsed between measurements [sec]
   double sensor_range = 50; // Sensor range [m]
 
-  double sigma_pos [3] = {2.0, 2.0, 0.1}; // GPS measurement uncertainty [x [m], y [m], theta [rad]]
-  double sigma_landmark [2] = {.3, .3}; // Landmark measurement uncertainty [x [m], y [m]]
+  double sigma_pos [3] = {3.0, 3.0, 0.1}; // GPS measurement uncertainty [x [m], y [m], theta [rad]]
+  double sigma_landmark [2] = {60, 60}; // Landmark measurement uncertainty [x [m], y [m]]
 
   // Read map data
   Map map_data;
@@ -90,8 +90,7 @@ int main()
 
 			pf.prediction(delta_t, sigma_pos, previous_velocity, previous_yawrate);
 			cout<<"Prediction Success."<<endl;
-
-
+		  }
 
 
 		  // receive noisy observation data from the simulator
@@ -128,7 +127,8 @@ int main()
 		  cout<<"Update Success."<<endl;
 		  pf.resample();
 		  cout<<"Resample Success."<<endl;
-		  }
+
+
 
 
 		  // Calculate and output the average weighted error of the particle filter over all time steps so far.
@@ -206,7 +206,6 @@ int main()
   }
   h.run();
 }
-
 
 
 
