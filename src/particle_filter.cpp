@@ -25,7 +25,7 @@ void ParticleFilter::init(double x, double y, double theta, double std_pos[]) {
 	//   x, y, theta and their uncertainties from GPS) and all weights to 1.
 	// Add random Gaussian noise to each particle.
 	// NOTE: Consult particle_filter.h for more information about this method (and others in this file).
-	num_particles = 100;
+	num_particles = 300;
 
 	// This line creates a normal (Gaussian) distribution for x, y, and theta
 	default_random_engine gen;
@@ -233,7 +233,7 @@ void ParticleFilter::resample() {
         generated_particle.weight = particles[number_generated].weight;
         particles_updated.push_back(generated_particle);
     }
-    cout<<endl;
+    /*cout<<endl;
     //replace the old list with the new list and delete the old list
     cout<<"Old particle list: ";
     for (int i = 0; i < num_particles; ++i){
@@ -247,13 +247,15 @@ void ParticleFilter::resample() {
             <<particles_updated[i].weight<<","<<particles_updated[i].theta<<") ";
     }
     cout<<endl;
+    */
     particles.swap(particles_updated);
-    cout<<"New old particle list: ";
+    /*cout<<"New old particle list: ";
     for (int i = 0; i < num_particles; ++i){
         cout<<"("<<particles[i].x<<","<<particles[i].y<<","
             <<particles[i].weight<<","<<particles[i].theta<<") ";
     }
     cout<<endl;
+    */
 
 }
 
