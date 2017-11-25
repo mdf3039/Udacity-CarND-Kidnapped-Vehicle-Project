@@ -15,7 +15,7 @@
 #include <string>
 #include <iterator>
 
-#include "hungarian-algorithm-cpp/Hungarian.h"
+#include "Hungarian.h"
 #include "particle_filter.h"
 
 using namespace std;
