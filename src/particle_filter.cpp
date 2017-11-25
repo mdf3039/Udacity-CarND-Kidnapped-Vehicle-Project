@@ -150,7 +150,11 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         std::vector<int> Assignment;
         HungarianAlgorithm hung_alg;
         double cost;
-        cost = hung_alg.Solve(DistMatrix,Assignment);
+        cost = hung_alg.Solve(DistMatrix);
+        Assignment = hung_alg.Assignment
+        for (int j=0; j<Assignment.size(); ++j){
+            cout<<"Particle "<<i<<" assignment "<<j<<": "<<Assignment[j]<<endl;
+        }
         //set the inverse cost value as the new weight for this particle
         particles[i].weight = 1.0/cost;
         //add the weight to the sum of the weights
