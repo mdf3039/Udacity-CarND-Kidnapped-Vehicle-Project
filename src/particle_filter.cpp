@@ -207,29 +207,29 @@ void ParticleFilter::resample() {
 	//obtain the random number generator and a vector of all of the weights
     std::default_random_engine generator;
     std::vector<double> weight_vector;
-    cout<<"Particle weights in vector: ";
+    //cout<<"Particle weights in vector: ";
     for (int i = 0; i < num_particles; ++i){
         weight_vector.push_back(particles[i].weight);
-        cout<<particles[i].weight<<" ";
+        //cout<<particles[i].weight<<" ";
     }
-    cout<<endl;
+    //cout<<endl;
     //obtain the discrete distribution according to the weight_vector
     std::discrete_distribution<> distribution(weight_vector.begin(), weight_vector.end());
     //Sample with replacement from this distribution, appending the new particles
     //to a list
-    cout<<"Numbers generated: ";
+    //cout<<"Numbers generated: ";
     std::vector<Particle> particles_updated;
     int number_generated;
     Particle generated_particle;
     for (int i = 0; i < num_particles; ++i){
         number_generated = distribution(generator);
-        cout<<number_generated<<" ";
+        //cout<<number_generated<<" ";
         generated_particle.theta = particles[number_generated].theta;
-        cout<<generated_particle.theta<<" ";
+        //cout<<generated_particle.theta<<" ";
         generated_particle.x = particles[number_generated].x;
-        cout<<generated_particle.x<<" ";
+        //cout<<generated_particle.x<<" ";
         generated_particle.y = particles[number_generated].y;
-        cout<<generated_particle.y<<" ";
+        //cout<<generated_particle.y<<" ";
         generated_particle.weight = particles[number_generated].weight;
         particles_updated.push_back(generated_particle);
     }
