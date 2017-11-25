@@ -149,16 +149,16 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         //the Solve function will produce a cost. Use this cost as the weight for resampling
         std::vector<int> hung_assignments;
         HungarianAlgorithm hung_alg;
-        double cost;
-        cost = hung_alg.Solve(DistMatrix);
-        hung_assignments = hung_alg.Assignment;
+        //double cost;
+        hung_assignments = hung_alg.Solve(DistMatrix,hung_assignments);
+        //hung_assignments = hung_alg.Assignment;
         for (int j=0; j<hung_assignments.size(); ++j){
             cout<<"Particle "<<i<<" assignment "<<j<<": "<<hung_assignments[j]<<endl;
         }
         //set the inverse cost value as the new weight for this particle
-        particles[i].weight = 1.0/cost;
+        particles[i].weight = 1.0;
         //add the weight to the sum of the weights
-        particle_weight_sum += 1.0/cost;
+        particle_weight_sum += 1.0;
         /*
         //obtain the distance from the first map landmark to all of the transformed
         //observations. save the distances in a vector and change the id in the
