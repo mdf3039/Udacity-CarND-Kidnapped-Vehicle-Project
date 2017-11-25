@@ -15,6 +15,7 @@
 #include <string>
 #include <iterator>
 
+#include "hungarian-algorithm-cpp/Hungarian.h"
 #include "particle_filter.h"
 
 using namespace std;
@@ -124,6 +125,37 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
             mapped_obs.y = particles[i].y + (sin(particles[i].theta)*observations[j].x)+(cos(particles[i].theta)-observations[j].y);
             mapped_observations.push_back(mapped_obs);
         }
+        //obtain a subset of all landmarks in the vicinity. The sensor_range provides the lidar area
+        Map subset_landmarks;
+        for (int j=0; j<map_landmarks.landmark_list.size(); ++j){
+            //if the distance from the car to the landmark is less than the sensor_range,
+            //append to the subset_landmarks list
+            if (sqrt(pow(particles[i].x-map_landmarks.landmark_list[j].x_f,2)+pow(particles[i].y-map_landmarks.landmark_list[j].y_f,2))<sensor_range+20){
+                subset_landmarks.landmark_list.push_back(map_landmarks.landmark_list[j]);
+            }
+        }
+        //obtain the distance from each landmark to an observation. Put in a vector
+        //of vectors with length(vector)=#landmarks for #observations vectors.
+        std::vector<std::vector<double>> DistMatrix;
+        for (int j=0; j<mapped_observations.size();++j){
+            std::vector<double> dist_vector;
+            for (int k=0; k<subset_landmarks.landmark_list.size();++k){
+                dist_vector.push_back(sqrt(pow(mapped_observations[j].x-subset_landmarks.landmark_list[k].x_f,2)+pow(mapped_observations[j].y-subset_landmarks.landmark_list[k].y_f,2)));
+            }
+            DistMatrix.push_back(dist_vector);
+        }
+        //use the Hungarian Algorithm to find the shortest distances connecting observations
+        //to landmarks. Create dummy Assignment variable
+        //the Solve function will produce a cost. Use this cost as the weight for resampling
+        std::vector<int> Assignment;
+        HungarianAlgorithm hung_alg;
+        double cost;
+        cost = hung_alg.Solve(DistMatrix,Assignment);
+        //set the inverse cost value as the new weight for this particle
+        particles[i].weight = 1.0/cost;
+        //add the weight to the sum of the weights
+        particle_weight_sum += 1.0/cost;
+        /*
         //obtain the distance from the first map landmark to all of the transformed
         //observations. save the distances in a vector and change the id in the
         //mapped observations to the first map landmark id
@@ -159,6 +191,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         particles[i].weight = particle_prob;
         //add the weight to the sum of the weights
         particle_weight_sum += particle_prob;
+        */
 	}
     //Normalize all weight values based on the sum
     for (int i = 0; i < num_particles; ++i) {
