@@ -130,7 +130,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         for (int j=0; j<map_landmarks.landmark_list.size(); ++j){
             //if the distance from the car to the landmark is less than the sensor_range,
             //append to the subset_landmarks list
-            if (sqrt(pow(particles[i].x-map_landmarks.landmark_list[j].x_f,2)+pow(particles[i].y-map_landmarks.landmark_list[j].y_f,2))<sensor_range+20){
+            if (sqrt(pow(particles[i].x-map_landmarks.landmark_list[j].x_f,2)+pow(particles[i].y-map_landmarks.landmark_list[j].y_f,2))<sensor_range+0){
                 subset_landmarks.landmark_list.push_back(map_landmarks.landmark_list[j]);
             }
         }
