@@ -167,8 +167,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
             else{
                 x2_dist = pow(subset_landmarks.landmark_list[hung_assignments[j]].x_f-mapped_observations[j].x,2);
                 y2_dist = pow(subset_landmarks.landmark_list[hung_assignments[j]].y_f-mapped_observations[j].y,2);
-                particle_prob *= exp(-1.0*(x2_dist+y2_dist)/(2*std_landmark[0]*std_landmark[0]));
             }
+            particle_prob *= exp(-1.0*(x2_dist+y2_dist)/(2*std_landmark[0]*std_landmark[0]));
         }
         //set the inverse cost value as the new weight for this particle
         particles[i].weight = particle_prob;
