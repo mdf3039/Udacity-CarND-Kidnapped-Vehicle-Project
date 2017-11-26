@@ -159,6 +159,12 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         double particle_prob = 1.0;
         double x2_dist;
         double y2_dist;
+        double x_var;
+        x_var = std_landmark[0]*std_landmark[0];
+        double y_var;
+        y_var = std_landmark[1]*std_landmark[1];
+        double gauss_norm;
+        gauss_norm = 1.0/(2*M_PI*std_landmark[0]*std_landmark[1]);
         for (int j = 0; j < hung_assignments.size(); ++j){
             if (hung_assignments[j]<0){
                 x2_dist = 400;
@@ -168,7 +174,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
                 x2_dist = pow(subset_landmarks.landmark_list[hung_assignments[j]].x_f-mapped_observations[j].x,2);
                 y2_dist = pow(subset_landmarks.landmark_list[hung_assignments[j]].y_f-mapped_observations[j].y,2);
             }
-            particle_prob *= exp(-1.0*(x2_dist+y2_dist)/(2*std_landmark[0]*std_landmark[0]));
+            particle_prob *= gauss_norm*exp(-1.0*(x2_dist/(2*x_var)+y2_dist/(2*y_var)));
+            cout<<"Particle "<<i<<" probability: "<<particle_prob<<endl;
         }
         //set the inverse cost value as the new weight for this particle
         particles[i].weight = particle_prob;
