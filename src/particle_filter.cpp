@@ -130,7 +130,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         for (int j=0; j<map_landmarks.landmark_list.size(); ++j){
             //if the distance from the car to the landmark is less than the sensor_range,
             //append to the subset_landmarks list
-            if (sqrt(pow(particles[i].x-map_landmarks.landmark_list[j].x_f,2)+pow(particles[i].y-map_landmarks.landmark_list[j].y_f,2))<sensor_range+0){
+            if (sqrt(pow(particles[i].x-map_landmarks.landmark_list[j].x_f,2)+pow(particles[i].y-map_landmarks.landmark_list[j].y_f,2))<sensor_range+10){
                 subset_landmarks.landmark_list.push_back(map_landmarks.landmark_list[j]);
             }
         }
@@ -152,13 +152,22 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         //double cost;
         hung_assignments = hung_alg.Solve(DistMatrix,hung_assignments);
         //hung_assignments = hung_alg.Assignment;
-        for (int j=0; j<hung_assignments.size(); ++j){
+        /*for (int j=0; j<hung_assignments.size(); ++j){
             cout<<"Particle "<<i<<" assignment "<<j<<": "<<hung_assignments[j]<<endl;
+        }*/
+        //now that the assignments to each observation are found, find the distance and probabilities
+        double particle_prob = 1.0;
+        double x2_dist;
+        double y2_dist;
+        for (int j = 0; j < hung_assignments.size(); ++j){
+            x2_dist = pow(subset_landmarks.landmark_list[hung_assignments[j]].x_f-mapped_observations[j].x,2);
+            y2_dist = pow(subset_landmarks.landmark_list[hung_assignments[j]].y_f-mapped_observations[j].y,2);
+            particle_prob *= exp(-1.0*(x2_dist+y2_dist)/(2*std_landmark[0]*std_landmark[0]));
         }
         //set the inverse cost value as the new weight for this particle
-        particles[i].weight = 1.0;
+        particles[i].weight = particle_prob;
         //add the weight to the sum of the weights
-        particle_weight_sum += 1.0;
+        particle_weight_sum += particle_prob;
         /*
         //obtain the distance from the first map landmark to all of the transformed
         //observations. save the distances in a vector and change the id in the
