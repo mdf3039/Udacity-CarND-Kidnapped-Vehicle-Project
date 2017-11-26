@@ -161,8 +161,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         double y2_dist;
         for (int j = 0; j < hung_assignments.size(); ++j){
             if (hung_assignments[j]<0){
-                x2_dist = 80;
-                y2_dist = 80;
+                x2_dist = 400;
+                y2_dist = 400;
             }
             else{
                 x2_dist = pow(subset_landmarks.landmark_list[hung_assignments[j]].x_f-mapped_observations[j].x,2);
