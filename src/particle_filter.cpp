@@ -179,7 +179,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
                 single_prob = gauss_norm*exp(-1.0*(x2_dist/(200*x_var)+y2_dist/(200*y_var)));
                 //cout<<"Prob: "<<single_prob;
             }
-            particle_prob *= gauss_norm*exp(-1.0*(x2_dist/(200*x_var)+y2_dist/(200*y_var)));
+            particle_prob *= gauss_norm*exp(-1.0*(x2_dist/(2*x_var)+y2_dist/(2*y_var)));
             //cout<<"Particle "<<i<<" probability: "<<particle_prob<<endl;
         }
         //set the inverse cost value as the new weight for this particle
