@@ -14,6 +14,7 @@
 #include <sstream>
 #include <string>
 #include <iterator>
+#include <queue>
 
 #include "Hungarian.h"
 #include "particle_filter.h"
@@ -184,7 +185,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         //set the inverse cost value as the new weight for this particle
         particles[i].weight = particle_prob;
         //add the weight to the sum of the weights
-        particle_weight_sum += particle_prob;
+        //particle_weight_sum += particle_prob;
         /*
         //obtain the distance from the first map landmark to all of the transformed
         //observations. save the distances in a vector and change the id in the
@@ -223,10 +224,32 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         particle_weight_sum += particle_prob;
         */
 	}
-    //Normalize all weight values based on the sum
+	//select the top num_particles/5 weights. The others will have values of zero
+	//the entire weights vector will equal zero
+	std::fill(weights.begin(),weights.end(),0.0);
+	//a priority queue vector is created
+    std::priority_queue<std::pair<double, int>> q;
+    //place each weight and its index in the queue
     for (int i = 0; i < num_particles; ++i) {
-        particles[i].weight /= particle_weight_sum;
+        q.push(std::pair<double, int>(particles[i].weight, i));
     }
+    //for the top num_particles/5, place the weight in the weights matrix
+    //also add the weight to the weight sum
+    for (int i = 0; i < num_particles/5; ++i) {
+        int ki = q.top().second;
+        weights[ki] = particles[ki].weight;
+        particle_weight_sum += particles[ki].weight;
+        q.pop();
+    }
+    //change the weights in particles to match the weights in weights
+    //also normalize based on the sum
+    for (int i = 0; i < num_particles; ++i) {
+        particles[i].weight = weights[i]/particle_weight_sum;
+    }
+    //Normalize all weight values based on the sum
+    /*for (int i = 0; i < num_particles; ++i) {
+        particles[i].weight /= particle_weight_sum;
+    }*/
 }
 
 void ParticleFilter::resample() {
