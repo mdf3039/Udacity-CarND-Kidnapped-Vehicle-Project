@@ -235,10 +235,10 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
     }
     //for the top num_particles/5, place the weight in the weights matrix
     //also add the weight to the weight sum
-    for (int i = 0; i < num_particles/10; ++i) {
+    for (int i = 0; i < num_particles/50; ++i) {
         int ki = q.top().second;
-        weights[ki] = num_particles/10-i;//particles[ki].weight;
-        particle_weight_sum += num_particles/10-i;//particles[ki].weight;
+        weights[ki] = num_particles/50-i;//particles[ki].weight;
+        particle_weight_sum += num_particles/50-i;//particles[ki].weight;
         q.pop();
     }
     //change the weights in particles to match the weights in weights
