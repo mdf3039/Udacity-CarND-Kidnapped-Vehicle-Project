@@ -130,7 +130,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         for (int j=0; j<map_landmarks.landmark_list.size(); ++j){
             //if the distance from the car to the landmark is less than the sensor_range,
             //append to the subset_landmarks list
-            if (sqrt(pow(particles[i].x-map_landmarks.landmark_list[j].x_f,2)+pow(particles[i].y-map_landmarks.landmark_list[j].y_f,2))<sensor_range+10){
+            if (sqrt(pow(particles[i].x-map_landmarks.landmark_list[j].x_f,2)+pow(particles[i].y-map_landmarks.landmark_list[j].y_f,2))<sensor_range+0){
                 subset_landmarks.landmark_list.push_back(map_landmarks.landmark_list[j]);
             }
         }
@@ -160,9 +160,15 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         double x2_dist;
         double y2_dist;
         for (int j = 0; j < hung_assignments.size(); ++j){
-            x2_dist = pow(subset_landmarks.landmark_list[hung_assignments[j]].x_f-mapped_observations[j].x,2);
-            y2_dist = pow(subset_landmarks.landmark_list[hung_assignments[j]].y_f-mapped_observations[j].y,2);
-            particle_prob *= exp(-1.0*(x2_dist+y2_dist)/(2*std_landmark[0]*std_landmark[0]));
+            if (hung_assignments[j]<0){
+                x2_dist = 80
+                y2_dist = 80
+            }
+            else{
+                x2_dist = pow(subset_landmarks.landmark_list[hung_assignments[j]].x_f-mapped_observations[j].x,2);
+                y2_dist = pow(subset_landmarks.landmark_list[hung_assignments[j]].y_f-mapped_observations[j].y,2);
+                particle_prob *= exp(-1.0*(x2_dist+y2_dist)/(2*std_landmark[0]*std_landmark[0]));
+            }
         }
         //set the inverse cost value as the new weight for this particle
         particles[i].weight = particle_prob;
