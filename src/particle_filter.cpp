@@ -122,8 +122,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         std::vector<LandmarkObs> mapped_observations;
         for (int j = 0; j < observations.size(); ++j){
             LandmarkObs mapped_obs;
-            mapped_obs.x = particles[i].x + (cos(particles[i].theta)*observations[j].x)-(sin(particles[i].theta)-observations[j].y);
-            mapped_obs.y = particles[i].y + (sin(particles[i].theta)*observations[j].x)+(cos(particles[i].theta)-observations[j].y);
+            mapped_obs.x = particles[i].x + (cos(particles[i].theta)*observations[j].x)-(sin(particles[i].theta)*observations[j].y);
+            mapped_obs.y = particles[i].y + (sin(particles[i].theta)*observations[j].x)+(cos(particles[i].theta)*observations[j].y);
             mapped_observations.push_back(mapped_obs);
         }
         //obtain a subset of all landmarks in the vicinity. The sensor_range provides the lidar area
@@ -131,7 +131,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         for (int j=0; j<map_landmarks.landmark_list.size(); ++j){
             //if the distance from the car to the landmark is less than the sensor_range,
             //append to the subset_landmarks list
-            if (sqrt(pow(particles[i].x-map_landmarks.landmark_list[j].x_f,2)+pow(particles[i].y-map_landmarks.landmark_list[j].y_f,2))<sensor_range+20){
+            if (sqrt(pow(particles[i].x-map_landmarks.landmark_list[j].x_f,2)+pow(particles[i].y-map_landmarks.landmark_list[j].y_f,2))<sensor_range){
                 subset_landmarks.landmark_list.push_back(map_landmarks.landmark_list[j]);
             }
         }
@@ -175,12 +175,12 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
             else{
                 x2_dist = pow(subset_landmarks.landmark_list[hung_assignments[j]].x_f-mapped_observations[j].x,2);
                 y2_dist = pow(subset_landmarks.landmark_list[hung_assignments[j]].y_f-mapped_observations[j].y,2);
-                cout<<"Distances: "<<x2_dist<<","<<y2_dist<<endl;
+                //cout<<"Distances: "<<x2_dist<<","<<y2_dist<<endl;
                 single_prob = gauss_norm*exp(-1.0*(x2_dist/(200*x_var)+y2_dist/(200*y_var)));
-                cout<<"Prob: "<<single_prob;
+                //cout<<"Prob: "<<single_prob;
             }
             particle_prob *= gauss_norm*exp(-1.0*(x2_dist/(200*x_var)+y2_dist/(200*y_var)));
-            cout<<"Particle "<<i<<" probability: "<<particle_prob<<endl;
+            //cout<<"Particle "<<i<<" probability: "<<particle_prob<<endl;
         }
         //set the inverse cost value as the new weight for this particle
         particles[i].weight = particle_prob;
@@ -235,10 +235,10 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
     }
     //for the top num_particles/5, place the weight in the weights matrix
     //also add the weight to the weight sum
-    for (int i = 0; i < num_particles/50; ++i) {
+    for (int i = 0; i < num_particles/10; ++i) {
         int ki = q.top().second;
-        weights[ki] = num_particles/50-i;//particles[ki].weight;
-        particle_weight_sum += num_particles/50-i;//particles[ki].weight;
+        weights[ki] = num_particles/10-i;//particles[ki].weight;
+        particle_weight_sum += num_particles/10-i;//particles[ki].weight;
         q.pop();
     }
     //change the weights in particles to match the weights in weights
