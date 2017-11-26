@@ -237,8 +237,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
     //also add the weight to the weight sum
     for (int i = 0; i < num_particles/10; ++i) {
         int ki = q.top().second;
-        weights[ki] = particles[ki].weight;
-        particle_weight_sum += particles[ki].weight;
+        weights[ki] = num_particles/10-i;//particles[ki].weight;
+        particle_weight_sum += num_particles/10-i;//particles[ki].weight;
         q.pop();
     }
     //change the weights in particles to match the weights in weights
