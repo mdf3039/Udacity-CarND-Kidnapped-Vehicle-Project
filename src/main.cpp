@@ -76,20 +76,20 @@ int main()
 			double sense_theta = std::stod(j[1]["sense_theta"].get<std::string>());
 
 			pf.init(sense_x, sense_y, sense_theta, sigma_pos);
-			cout<<"Initialization Success."<<endl;
-			cout<<"Sense X: "<<sense_x<<endl;
-			cout<<"Sense Y: "<<sense_y<<endl;
+			//cout<<"Initialization Success."<<endl;
+			//cout<<"Sense X: "<<sense_x<<endl;
+			//cout<<"Sense Y: "<<sense_y<<endl;
 		  }
 		  else {
 			// Predict the vehicle's next state from previous (noiseless control) data.
 		  	double previous_velocity = std::stod(j[1]["previous_velocity"].get<std::string>());
 			double previous_yawrate = std::stod(j[1]["previous_yawrate"].get<std::string>());
-            cout<<"previous_velocity: "<<previous_velocity<<endl;
-            cout<<"previous_yawrate: "<<previous_yawrate<<endl;
+            //cout<<"previous_velocity: "<<previous_velocity<<endl;
+            //cout<<"previous_yawrate: "<<previous_yawrate<<endl;
 
 
 			pf.prediction(delta_t, sigma_pos, previous_velocity, previous_yawrate);
-			cout<<"Prediction Success."<<endl;
+			//cout<<"Prediction Success."<<endl;
 		  }
 
 
@@ -120,13 +120,13 @@ int main()
 				obs.y = y_sense[i];
 				noisy_observations.push_back(obs);
         	}
-        	cout<<"Noisy Observations: "<<endl;
+        	//cout<<"Noisy Observations: "<<endl;
 
 		  // Update the weights and resample
 		  pf.updateWeights(sensor_range, sigma_landmark, noisy_observations, map_data);
-		  cout<<"Update Success."<<endl;
+		  //cout<<"Update Success."<<endl;
 		  pf.resample();
-		  cout<<"Resample Success."<<endl;
+		  //cout<<"Resample Success."<<endl;
 
 
 
@@ -144,8 +144,8 @@ int main()
 			}
 			weight_sum += particles[i].weight;
 		  }
-		  cout << "highest w " << highest_weight << endl;
-		  cout << "average w " << weight_sum/num_particles << endl;
+		  //cout << "highest w " << highest_weight << endl;
+		  //cout << "average w " << weight_sum/num_particles << endl;
 
           json msgJson;
           msgJson["best_particle_x"] = best_particle.x;

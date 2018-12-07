@@ -78,15 +78,15 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	}
     else{
         for (int i = 0; i < num_particles; ++i) {
-            cout<<"X: "<<particles[i].x<<endl;
+            //cout<<"X: "<<particles[i].x<<endl;
             particles[i].x += velocity*cos(particles[i].theta)*delta_t+dist_x(gen);
-            cout<<"X_new: "<<particles[i].x<<endl;
-            cout<<"Y: "<<particles[i].y<<endl;
+            //cout<<"X_new: "<<particles[i].x<<endl;
+            //cout<<"Y: "<<particles[i].y<<endl;
             particles[i].y += velocity*sin(particles[i].theta)*delta_t+dist_y(gen);
-            cout<<"Y_new: "<<particles[i].y<<endl;
-            cout<<"Theta: "<<particles[i].theta<<endl;
+            //cout<<"Y_new: "<<particles[i].y<<endl;
+            //cout<<"Theta: "<<particles[i].theta<<endl;
             particles[i].theta += yaw_rate*delta_t+dist_theta(gen);
-            cout<<"Theta_new: "<<particles[i].theta<<endl;
+            //cout<<"Theta_new: "<<particles[i].theta<<endl;
         }
 	}
 
